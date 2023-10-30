@@ -1,10 +1,11 @@
 #!/bin/bash
-# |______________________Simple tor launcher_____________________|
+# |_________________________ tor launcher _______________________|
 # |                 For launching tor automaticly                |
 # |______________________________________________________________|
 # |> Made by: 
 # |> CPScript | Disease
 # |> kirakenjiro | Kira (freind from discord)
+# |> Version 3.6
 
 # Are you root check
 if [[ $EUID -ne 0 ]]; then
@@ -18,12 +19,19 @@ if [[ $EUID -ne 0 ]]; then
   echo 3. Use USB (run this script on a disposable USB)
   sleep 6
   clear
-  
-  echo Launching tor before running script, please wait...
+
+  # Check if Tor is installed
+  if ! command -v tor &> /dev/null; then
+    echo "Tor is not installed. Installing Tor, please wait..."
+    sudo apt-get update
+    sudo apt-get install -y tor
+  fi
+
+  # Start Tor service
+  echo Starting tor service, please wait
+  sudo service tor start
   sleep 2
   clear
-
-  tor
 
   # Tor identity
   newnym() {
@@ -31,14 +39,19 @@ if [[ $EUID -ne 0 ]]; then
     echo -n "SIGNAL NEWNYM" | nc 127.0.0.1 9051
   }
 
-  # Download the repo
-  git clone https://github.com/CPScript/Tor-Launcher
+  # Retrieve user's public IP address using Tor
+  echo "Retrieving your public IP address via Tor, please wait..."
+  torsocks curl -s https://ipinfo.io/ip
+
+  # Download the repo over Tor
+  torsocks git clone https://github.com/CPScript/Tor-Launcher
 
   # Change Dir
   cd Tor-Launcher/extra
 
-  # Launch script
-  ./good.txt
+  # Launch script with Tor
+  torsocks ./good.txt
+
 
 else
   # Not rooted message | How to root
