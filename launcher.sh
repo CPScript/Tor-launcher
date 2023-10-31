@@ -9,7 +9,7 @@
 
 # Are you root check
 if [[ $EUID -ne 0 ]]; then
-  echo You are root!
+  echo You are root
   sleep 1
   clear
 
