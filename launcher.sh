@@ -58,5 +58,5 @@ else
   echo Please root
   sleep 2
   echo Example on how to root your terminal:
-  echo sudo su | might require a password
+  echo sudo su / might require a password
 fi
